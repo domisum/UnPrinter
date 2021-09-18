@@ -1,4 +1,4 @@
-package io.domisum.unprinter;
+package io.domisum.unprinter.model;
 
 public enum Sign
 {

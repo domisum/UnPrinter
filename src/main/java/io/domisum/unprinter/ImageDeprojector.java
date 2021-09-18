@@ -5,6 +5,8 @@ import io.domisum.lib.snaporta.Snaporta;
 import io.domisum.lib.snaporta.snaportas.SnaportaPainter;
 import io.domisum.lib.snaporta.snaportas.transform.interpolator.Interpolator;
 import io.domisum.lib.snaporta.util.Sized;
+import io.domisum.unprinter.model.ContentBounds;
+import io.domisum.unprinter.model.Corner;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

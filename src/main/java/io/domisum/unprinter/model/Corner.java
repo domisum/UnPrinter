@@ -1,4 +1,4 @@
-package io.domisum.unprinter;
+package io.domisum.unprinter.model;
 
 import io.domisum.lib.auxiliumlib.datacontainers.math.Coordinate2DInt;
 import io.domisum.lib.snaporta.util.Sized;

@@ -5,8 +5,9 @@ import io.domisum.lib.auxiliumlib.datacontainers.math.Coordinate2DInt;
 import io.domisum.lib.snaporta.Snaporta;
 import io.domisum.lib.snaporta.color.Color;
 import io.domisum.lib.snaporta.util.ArgbUtil;
+import io.domisum.unprinter.model.ContentBounds;
+import io.domisum.unprinter.model.Corner;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ContentBoundsDetector
