@@ -5,25 +5,23 @@ import io.domisum.lib.auxiliumlib.datacontainers.math.Coordinate2DInt;
 import io.domisum.lib.snaporta.Snaporta;
 import io.domisum.lib.snaporta.color.Color;
 import io.domisum.lib.snaporta.util.ArgbUtil;
-import io.domisum.lib.snaporta.util.Sized;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ContentBoundsDetector
 {
 	
 	public ContentBounds detect(Snaporta image)
 	{
-		var cornersCoordinates = new ArrayList<Coordinate2DInt>();
+		var cornerCoordinates = new HashMap<Corner, Coordinate2DInt>();
 		for(var corner : Corner.values())
 		{
 			var cornerCoords = detectCornerCoordinates(image, corner);
-			cornersCoordinates.add(cornerCoords);
+			cornerCoordinates.put(corner, cornerCoords);
 		}
 		
-		return new ContentBounds(cornersCoordinates);
+		return new ContentBounds(cornerCoordinates);
 	}
 	
 	private Coordinate2DInt detectCornerCoordinates(Snaporta image, Corner corner)
@@ -80,56 +78,13 @@ public class ContentBoundsDetector
 	
 	private boolean doesPixelQualifyAsContent(Snaporta image, int x, int y)
 	{
+		if(image.isOutOfBounds(x, y))
+			return false;
+		
 		int argb = image.getArgbAt(x, y);
 		int blue = ArgbUtil.getRedComponent(argb);
 		
 		return blue > Color.COLOR_COMPONENT_MAX/3;
-	}
-	
-	
-	@RequiredArgsConstructor
-	private enum Corner
-	{
-		
-		TOP_LEFT(Sign.POSITIVE, Sign.POSITIVE),
-		TOP_RIGHT(Sign.NEGATIVE, Sign.POSITIVE),
-		BOTTOM_RIGHT(Sign.NEGATIVE, Sign.NEGATIVE),
-		BOTTOM_LEFT(Sign.POSITIVE, Sign.NEGATIVE);
-		
-		
-		@Getter
-		private final Sign awaySignX;
-		@Getter
-		private final Sign awaySignY;
-		
-		
-		// GETTERS
-		public Coordinate2DInt getPixelCoordinates(Sized sized)
-		{
-			int xCoord = awaySignX == Sign.NEGATIVE ? sized.getWidth()-1 : 0;
-			int yCoord = awaySignY == Sign.NEGATIVE ? sized.getHeight()-1 : 0;
-			
-			return new Coordinate2DInt(xCoord, yCoord);
-		}
-		
-	}
-	
-	private enum Sign
-	{
-		
-		POSITIVE,
-		NEGATIVE;
-		
-		
-		// GETTERS
-		public int getFactor()
-		{
-			if(this == POSITIVE)
-				return 1;
-			else
-				return -1;
-		}
-		
 	}
 	
 }
