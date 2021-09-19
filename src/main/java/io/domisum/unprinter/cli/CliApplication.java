@@ -55,6 +55,7 @@ public final class CliApplication
 			while(scanner.hasNextLine())
 			{
 				String input = scanner.nextLine();
+				logger.info("Received input: {}", input);
 				pendingCommandInputs.add(input);
 			}
 		}
