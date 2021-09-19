@@ -9,13 +9,13 @@ import io.domisum.lib.auxiliumlib.util.StringUtil;
 import io.domisum.lib.snaporta.CardinalRotation;
 import io.domisum.lib.snaporta.Snaporta;
 import io.domisum.lib.snaporta.formatconversion.io.SnaportaReader;
+import io.domisum.lib.snaporta.snaportas.color.AutomaticWhiteBalanceSnaporta;
 import io.domisum.lib.snaporta.snaportas.transform.CardinallyRotatedSnaporta;
 import io.domisum.lib.snaporta.snaportas.transform.interpolator.ClosestPixelInterpolator;
 import io.domisum.lib.snaporta.util.Sized;
 import io.domisum.unprinter.ContentBoundsDetector;
-import io.domisum.lib.snaporta.snaportas.color.AutomaticWhiteBalanceSnaporta;
-import io.domisum.unprinter.image.ImageDeprojector;
 import io.domisum.unprinter.ImagePdfWriter;
+import io.domisum.unprinter.image.ImageDeprojector;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,13 +89,14 @@ public class PdfCommand
 		logger.info("Rotation: {}", rotation);
 		inputImage = new CardinallyRotatedSnaporta(inputImage, rotation);
 		
-		inputImage = new AutomaticWhiteBalanceSnaporta(inputImage);
-		
 		var contentBounds = contentBoundsDetector.detect(inputImage);
 		if(contentBounds.getTopWidth() > contentBounds.getLeftHeight())
 			logger.warn("Top width ({}) is greater than left height ({}). Not rotated correctly?".toUpperCase(Locale.ROOT),
 				Math.round(contentBounds.getTopWidth()), Math.round(contentBounds.getLeftHeight()));
 		var deprojectedImage = deprojector.deproject(inputImage, contentBounds, A4_300_DPI_RESOLUTION);
+		
+		if(shouldWhiteBalance(argSplit))
+			deprojectedImage = new AutomaticWhiteBalanceSnaporta(deprojectedImage);
 		
 		images.add(deprojectedImage);
 	}
@@ -139,6 +140,15 @@ public class PdfCommand
 				return CardinalRotation._180;
 		
 		return CardinalRotation.NONE;
+	}
+	
+	private boolean shouldWhiteBalance(List<String> argSplit)
+	{
+		for(String s : argSplit)
+			if("nwb".equalsIgnoreCase(s))
+				return false;
+		
+		return true;
 	}
 	
 }
