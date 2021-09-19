@@ -96,7 +96,14 @@ public final class CliApplication
 	
 	private void pdf(List<String> args)
 	{
-		new PdfCommand(inputDir, outputDir, args).execute();
+		try
+		{
+			new PdfCommand(inputDir, outputDir, args).execute();
+		}
+		catch(Exception e)
+		{
+			logger.error("Failed to run pdf", e);
+		}
 	}
 	
 	private void stop()
