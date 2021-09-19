@@ -27,30 +27,33 @@ public class ImagePdfWriter
 	
 	public void write(File pdfFile, List<Snaporta> images)
 	{
-		try
+		pdfFile.getParentFile().mkdirs();
+		
+		try(var pdfDoc = new PdfDocument(new PdfWriter(pdfFile));
+			var doc = new Document(pdfDoc, PageSize.A4))
 		{
-			pdfFile.getParentFile().mkdirs();
-			
-			var pdfDoc = new PdfDocument(new PdfWriter(pdfFile));
-			var doc = new Document(pdfDoc, PageSize.A4);
-			doc.setMargins(0, 0, 0, 0);
-			
-			for(var snaporta : images)
-			{
-				var imgRaw = SnaportaWriter.writeToRaw(snaporta);
-				
-				var imageData = ImageDataFactory.create(imgRaw);
-				Image img = new Image(imageData);
-				img.setWidth(UnitValue.createPercentValue(100));
-				img.setHeight(UnitValue.createPercentValue(100));
-				doc.add(img);
-			}
-			
-			doc.close();
+			writeUncaught(doc, images);
 		}
 		catch(FileNotFoundException e)
 		{
 			throw new ProgrammingError(e);
+		}
+	}
+	
+	private void writeUncaught(Document doc, List<Snaporta> images)
+	{
+		doc.setMargins(0, 0, 0, 0);
+		
+		for(var snaporta : images)
+		{
+			var imgRaw = SnaportaWriter.writeToRaw(snaporta, "jpg");
+			var imageData = ImageDataFactory.createJpeg(imgRaw);
+			
+			var img = new Image(imageData);
+			img.setWidth(UnitValue.createPercentValue(100));
+			img.setHeight(UnitValue.createPercentValue(100));
+			
+			doc.add(img);
 		}
 	}
 	

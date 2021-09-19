@@ -79,10 +79,12 @@ public class PdfCommand
 		var argSplit = StringUtil.split(arg, ":");
 		
 		var file = findFile(argSplit.get(0));
-		logger.info("Query matched file: {}", file);
+		logger.info("Query matched file: {}", file.getName());
 		var inputImage = SnaportaReader.readFromFile(file);
 		
 		var rotation = parseRotation(argSplit);
+		if(rotation != CardinalRotation.NONE)
+			logger.info("Rotation: {}", rotation);
 		inputImage = new CardinallyRotatedSnaporta(inputImage, rotation);
 		
 		var contentBounds = contentBoundsDetector.detect(inputImage);
