@@ -13,7 +13,7 @@ import io.domisum.lib.snaporta.snaportas.transform.CardinallyRotatedSnaporta;
 import io.domisum.lib.snaporta.snaportas.transform.interpolator.ClosestPixelInterpolator;
 import io.domisum.lib.snaporta.util.Sized;
 import io.domisum.unprinter.ContentBoundsDetector;
-import io.domisum.unprinter.ImageDeprojector;
+import io.domisum.unprinter.image.ImageDeprojector;
 import io.domisum.unprinter.ImagePdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

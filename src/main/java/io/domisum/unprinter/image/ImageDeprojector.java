@@ -1,4 +1,4 @@
-package io.domisum.unprinter;
+package io.domisum.unprinter.image;
 
 import io.domisum.lib.snaporta.Snaporta;
 import io.domisum.lib.snaporta.snaportas.SnaportaPainter;
