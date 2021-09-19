@@ -13,6 +13,7 @@ import io.domisum.lib.snaporta.snaportas.transform.CardinallyRotatedSnaporta;
 import io.domisum.lib.snaporta.snaportas.transform.interpolator.ClosestPixelInterpolator;
 import io.domisum.lib.snaporta.util.Sized;
 import io.domisum.unprinter.ContentBoundsDetector;
+import io.domisum.lib.snaporta.snaportas.color.AutomaticWhiteBalanceSnaporta;
 import io.domisum.unprinter.image.ImageDeprojector;
 import io.domisum.unprinter.ImagePdfWriter;
 import lombok.RequiredArgsConstructor;
@@ -87,6 +88,8 @@ public class PdfCommand
 		var rotation = parseRotation(argSplit);
 		logger.info("Rotation: {}", rotation);
 		inputImage = new CardinallyRotatedSnaporta(inputImage, rotation);
+		
+		inputImage = new AutomaticWhiteBalanceSnaporta(inputImage);
 		
 		var contentBounds = contentBoundsDetector.detect(inputImage);
 		if(contentBounds.getTopWidth() > contentBounds.getLeftHeight())
