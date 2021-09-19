@@ -10,6 +10,8 @@ import io.domisum.lib.snaporta.CardinalRotation;
 import io.domisum.lib.snaporta.Snaporta;
 import io.domisum.lib.snaporta.formatconversion.io.SnaportaReader;
 import io.domisum.lib.snaporta.snaportas.transform.CardinallyRotatedSnaporta;
+import io.domisum.lib.snaporta.snaportas.transform.interpolator.ClosestPixelInterpolator;
+import io.domisum.lib.snaporta.snaportas.transform.interpolator.Interpolator;
 import io.domisum.lib.snaporta.snaportas.transform.interpolator.matrix.BiLinearInterpolator;
 import io.domisum.lib.snaporta.util.Sized;
 import io.domisum.unprinter.ContentBoundsDetector;
@@ -43,7 +45,7 @@ public class PdfCommand
 	
 	// DEPENDENCIES
 	private final ContentBoundsDetector contentBoundsDetector = new ContentBoundsDetector();
-	private final ImageDeprojector deprojector = new ImageDeprojector(new BiLinearInterpolator());
+	private final ImageDeprojector deprojector = new ImageDeprojector(new ClosestPixelInterpolator());
 	private final ImagePdfWriter imagePdfWriter = new ImagePdfWriter();
 	
 	// SETTINGS
