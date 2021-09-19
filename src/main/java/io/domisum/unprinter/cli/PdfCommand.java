@@ -69,8 +69,10 @@ public class PdfCommand
 		
 		var outputPdfFile = new File(outputDir, documentName+".pdf");
 		logger.info("Writing {} image(s) to pdf file: {}", images.size(), outputPdfFile);
+		if(outputPdfFile.exists())
+			logger.warn("Output pdf file already exists, overwriting");
 		imagePdfWriter.write(outputPdfFile, images);
-		logger.info("Pdf done");
+		logger.info("Pdf done\n");
 	}
 	
 	private void handleArg(String arg)
@@ -87,6 +89,9 @@ public class PdfCommand
 		inputImage = new CardinallyRotatedSnaporta(inputImage, rotation);
 		
 		var contentBounds = contentBoundsDetector.detect(inputImage);
+		if(contentBounds.getTopWidth() > contentBounds.getLeftHeight())
+			logger.warn("Top width ({}) is greater than left height ({}). Not rotated correctly?".toUpperCase(Locale.ROOT),
+				Math.round(contentBounds.getTopWidth()), Math.round(contentBounds.getLeftHeight()));
 		var deprojectedImage = deprojector.deproject(inputImage, contentBounds, A4_300_DPI_RESOLUTION);
 		
 		images.add(deprojectedImage);

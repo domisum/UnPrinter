@@ -1,6 +1,7 @@
 package io.domisum.unprinter.model;
 
 import io.domisum.lib.auxiliumlib.datacontainers.math.Coordinate2DInt;
+import io.domisum.lib.auxiliumlib.datacontainers.math.Vector2D;
 import lombok.Getter;
 
 import java.util.Map;
@@ -29,6 +30,26 @@ public class ContentBounds
 	public Coordinate2DInt getCorner(Corner corner)
 	{
 		return corners.get(corner);
+	}
+	
+	public Vector2D getCornerVector(Corner corner)
+	{
+		var cornerCoord = getCorner(corner);
+		return new Vector2D(cornerCoord.getX(), cornerCoord.getY());
+	}
+	
+	public double getTopWidth()
+	{
+		var tl = getCornerVector(Corner.TOP_LEFT);
+		var tr = getCornerVector(Corner.TOP_RIGHT);
+		return tl.distanceTo(tr);
+	}
+	
+	public double getLeftHeight()
+	{
+		var tl = getCornerVector(Corner.TOP_LEFT);
+		var bl = getCornerVector(Corner.BOTTOM_LEFT);
+		return tl.distanceTo(bl);
 	}
 	
 }
