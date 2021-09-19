@@ -2,6 +2,7 @@ package io.domisum.unprinter.cli;
 
 import io.domisum.lib.auxiliumlib.thread.ticker.IntervalTaskTicker;
 import io.domisum.lib.auxiliumlib.util.StringUtil;
+import io.domisum.lib.auxiliumlib.util.ThreadUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,17 @@ public final class CliApplication
 		ticker.addTask("executeCommand", this::executeCommand, Duration.ofMillis(100));
 		ticker.start();
 		
-		logger.info("Waiting for command input");
+		startCliReadDaemon();
+	}
+	
+	private void startCliReadDaemon()
+	{
+		ThreadUtil.createAndStartDaemonThread(this::cliRead, "cliRead");
+	}
+	
+	private void cliRead()
+	{
+		logger.info("Waiting for command input...");
 		try(var scanner = new Scanner(System.in))
 		{
 			while(scanner.hasNextLine())
