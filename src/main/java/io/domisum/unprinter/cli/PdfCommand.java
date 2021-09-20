@@ -97,6 +97,8 @@ public class PdfCommand
 		
 		if(shouldWhiteBalance(argSplit))
 			deprojectedImage = new AutomaticWhiteBalanceSnaporta(deprojectedImage);
+		else
+			logger.info("No white balancing");
 		
 		images.add(deprojectedImage);
 	}
