@@ -36,7 +36,7 @@ public final class CliApplication
 	
 	private CliApplication()
 	{
-		ticker.addTask("executeCommand", this::executeCommand, Duration.ofMillis(100));
+		ticker.addTask("executeCommand", this::processCommand, Duration.ofMillis(100));
 		ticker.start();
 		
 		startCliReadDaemon();
@@ -63,24 +63,41 @@ public final class CliApplication
 	
 	
 	// EXECUTE
-	private void executeCommand()
+	private void processCommand()
 	{
 		String commandInput = pendingCommandInputs.poll();
 		if(commandInput == null)
 			return;
 		
 		var segments = StringUtil.split(commandInput, " ");
+		if(segments.isEmpty())
+			return;
+		
 		String commandName = segments.get(0).toLowerCase();
 		var args = segments.subList(1, segments.size());
 		
-		if("inputDir".equalsIgnoreCase(commandName))
-			inputDir(args);
-		else if("outputDir".equalsIgnoreCase(commandName))
-			outputDir(args);
-		else if("pdf".equalsIgnoreCase(commandName))
-			pdf(args);
-		else if("stop".equalsIgnoreCase(commandName) || "exit".equalsIgnoreCase(commandName))
-			stop();
+		executeCommand(commandName, args);
+	}
+	
+	private void executeCommand(String commandName, List<String> args)
+	{
+		try
+		{
+			if("inputDir".equalsIgnoreCase(commandName))
+				inputDir(args);
+			else if("outputDir".equalsIgnoreCase(commandName))
+				outputDir(args);
+			else if("pdf".equalsIgnoreCase(commandName))
+				new PdfCommand(inputDir, outputDir, args).execute();
+			else if("stop".equalsIgnoreCase(commandName) || "exit".equalsIgnoreCase(commandName))
+				stop();
+			else
+				logger.error("Unknown command: {}", commandName);
+		}
+		catch(Exception e)
+		{
+			logger.error("Failed to execute command {}", commandName, e);
+		}
 	}
 	
 	private void inputDir(List<String> args)
@@ -93,18 +110,6 @@ public final class CliApplication
 	{
 		outputDir = new File(args.get(0));
 		logger.info("Output directory: {}", outputDir.getAbsolutePath());
-	}
-	
-	private void pdf(List<String> args)
-	{
-		try
-		{
-			new PdfCommand(inputDir, outputDir, args).execute();
-		}
-		catch(Exception e)
-		{
-			logger.error("Failed to run pdf", e);
-		}
 	}
 	
 	private void stop()
