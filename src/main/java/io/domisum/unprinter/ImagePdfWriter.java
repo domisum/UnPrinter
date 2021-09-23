@@ -27,7 +27,7 @@ public class ImagePdfWriter
 	
 	public void write(File pdfFile, List<Snaporta> images)
 	{
-		pdfFile.getParentFile().mkdirs();
+		pdfFile.getAbsoluteFile().getParentFile().mkdirs();
 		
 		try(var pdfDoc = new PdfDocument(new PdfWriter(pdfFile));
 			var doc = new Document(pdfDoc, PageSize.A4))
