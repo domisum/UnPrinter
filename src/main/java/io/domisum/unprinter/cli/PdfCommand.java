@@ -61,6 +61,11 @@ public class PdfCommand
 	// EXECUTE
 	public void execute()
 	{
+		if(inputDir == null)
+			throw new IllegalStateException("inputDir is null");
+		if(outputDir == null)
+			throw new IllegalStateException("outputDir is null");
+		
 		String documentName = args.get(0);
 		logger.info("Document name: {}", documentName);
 		
@@ -69,7 +74,7 @@ public class PdfCommand
 			handleArg(arg);
 		
 		var outputPdfFile = new File(outputDir, documentName+".pdf");
-		logger.info("Writing {} image(s) to pdf file: {}", images.size(), outputPdfFile);
+		logger.info("Writing {} image(s) to pdf file: {}", images.size(), outputPdfFile.getAbsolutePath());
 		if(outputPdfFile.exists())
 			logger.warn("Output pdf file already exists, overwriting");
 		imagePdfWriter.write(outputPdfFile, images);
