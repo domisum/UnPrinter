@@ -69,7 +69,7 @@ public final class CliApplication
 		if(commandInput == null)
 			return;
 		
-		var segments = StringUtil.split(commandInput, " ");
+		var segments = StringUtil.splitByLiteral(commandInput, " ");
 		if(segments.isEmpty())
 			return;
 		

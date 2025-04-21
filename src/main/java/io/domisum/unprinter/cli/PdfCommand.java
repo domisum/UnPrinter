@@ -84,7 +84,7 @@ public class PdfCommand
 	private void handleArg(String arg)
 	{
 		logger.info("Pdf arg: {}", arg);
-		var argSplit = StringUtil.split(arg, ":");
+		var argSplit = StringUtil.splitByLiteral(arg, ":");
 		
 		var file = findFile(argSplit.get(0));
 		logger.info("Query matched file: {}", file.getName());
